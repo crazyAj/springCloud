@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.druid2.Druid2ExampleDao">
+    <resultMap type="example" id="exampleResultMap">
+        <result property="id" column="ID"/>
+        <result property="empKey" column="EMP_KEY"/>
+        <result property="empValue" column="EMP_VALUE"/>
+    </resultMap>
+
+    <sql id="table_columns">
+        ID,
+        EMP_KEY,
+        EMP_VALUE
+    </sql>
+
+    <!-- 使用like用法：columnName like concat('%',#columnName#,'%') -->
+    <sql id="page_where">
+        <trim prefix="where" prefixOverrides="and | or ">
+            <if test="id != null and id != ''">and ID = #{id}</if>
+            <if test="empKey != null and empKey != ''">and EMP_KEY = #{empKey}</if>
+            <if test="empValue != null and empValue != ''">and EMP_VALUE = #{empValue}</if>
+            <!--<if test="createTime != null">and create_time = #{createTime}</if>-->
+        </trim>
+    </sql>
+
+    <!--<select id="getExampleSEQ" resultType="String">
+        select seq_example.nextval from dual
+    </select>-->
+
+    <select id="findAll" resultMap="exampleResultMap">
+        select
+        <include refid="table_columns"/>
+        from EXAMPLE
+    </select>
+
+    <select id="find" resultMap="exampleResultMap">
+        select
+        <include refid="table_columns"/>
+        from EXAMPLE
+        <include refid="page_where"/>
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(1)
+        from EXAMPLE
+        <include refid="page_where"/>
+    </select>
+
+    <select id="getByPrimaryKey" parameterType="String" resultMap="exampleResultMap">
+        select
+        <include refid="table_columns"/>
+        from EXAMPLE
+        where ID = #{id}
+    </select>
+
+    <insert id="insertSelective" parameterType="example">
+        insert into EXAMPLE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
+            <if test="empKey != null and empKey != ''">EMP_KEY,</if>
+            <if test="empValue != null and empValue != ''">EMP_VALUE,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="empKey != null and empKey != ''">#{empKey},</if>
+            <if test="empValue != null and empValue != ''">#{empValue},</if>
+        </trim>
+    </insert>
+
+    <delete id="delete" parameterType="example">
+        delete from EXAMPLE
+        <include refid="page_where"/>
+    </delete>
+
+    <delete id="deleteById" parameterType="String">
+        delete from EXAMPLE
+        where ID = #{id}
+    </delete>
+
+    <update id="updateById" parameterType="example">
+        update EXAMPLE
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id != null and id != ''">ID = #{id},</if>
+            <if test="empKey != null and empKey != ''">EMP_KEY = #{empKey},</if>
+            <if test="empValue != null and empValue != ''">EMP_VALUE = #{empValue},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <!-- 其他自定义SQL -->
+
+
+</mapper>

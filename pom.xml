@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- 唯一定位 -->
+	<groupId>com.example</groupId>
+	<artifactId>springCloud</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<modules>
+		<module>springCloud-base</module>
+		<module>springCloud-eureka</module>
+	</modules>
+
+	<!-- 打成jar包，java -jar thread.jar运行 -->
+	<!--<packaging>jar</packaging>-->
+	<!-- 打成war包，放到容器里面，启动类要继承configure方法 -->
+	<packaging>pom</packaging>
+
+	<name>springCloud</name>
+
+	<!-- 继承SpringBoot，免去很多常用的依赖包 -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<!-- 属性 -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<!--
+		 	当你尝试使用maven进行编译时，maven会尝试执行Junit测试。
+		 	在你的情况下，你在 src/resources/java 中有一些单元测试，所以maven尝试执行它们。
+		 	由于您使用的是JNDI数据源，这意味着servlet容器也必须处于活动状态才能执行测试，否则您将无法获得连接。
+			在这种情况下，当maven尝试执行测试时，可能没有servlet容器（因此，没有JNDI数据源）处于活动状态，并且您的测试会引发错误。
+
+			maven.test.skip					排除测试执行
+			maven.test.failure.ignore		忽略测试错误。执行测试，但任何测试错误都不会停止maven编译
+		 -->
+		<maven.test.skip>true</maven.test.skip>
+		<!--<maven.test.failure.ignore>true</maven.test.failure.ignore>-->
+		<!-- springCloud 版本控制 -->
+		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- 依赖 -->
+	<dependencies>
+		<!-- SpringBoot核心包 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Tomcat -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- SpringBoot J2EE包 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+        <!-- SpringBoot 测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- SpringTest -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.3.3.RELEASE</version>
+        </dependency>
+        <!-- 热部署，修改配置文件无效，保存自动重新加载 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+		<!--<<<<<<<<<<< others >>>>>>>>>>>>>>-->
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.16</version>
+		</dependency>
+		<!-- fastjson -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.32</version>
+		</dependency>
+		<!-- junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
+	</dependencies>
+
+</project>

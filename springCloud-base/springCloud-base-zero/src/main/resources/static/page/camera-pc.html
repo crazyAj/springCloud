@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>摄像头调用</title>
+    <style>
+        * {margin: 0px;padding: 0px;}
+        body {background: #4C5666;}
+        #video {
+            width: 610px;
+            height: 510px;
+            background-color: #fff;
+            margin: 100px auto 0;
+            border-radius: 10px;
+        }
+        .video_top {
+            width: 100%;
+            height: 50px;
+            /* background-color: #0ff; */
+            line-height: 50px;
+        }
+        .video_top a {
+            float: left;
+            text-decoration: none;
+            color: #000;
+            margin-left: 20px;
+        }
+        .video_top p {
+            float: left;
+            margin-left: 200px;
+        }
+        .video_con {
+            height: 410px;
+            background: #787878;
+        }
+        .video_bot {
+            height: 50px;
+            line-height: 50px;
+            margin-left: 20px;
+        }
+        .video_bot a {
+            color: #000;
+            text-decoration: none;
+        }
+        #canvas {
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+<div id="video">
+    <div class="video_top">
+        <a href="javascript:;" onclick="getPhoto()">拍照</a>
+        <p>相机</p>
+    </div>
+    <div class="video_con">
+        <video id="v" width="610" height="410" autoplay></video>
+    </div>
+</div>
+<canvas id="canvas" width="610" height="400"></canvas>
+<script>
+
+    var can, ctx;
+
+    ~(function () {
+        // 老的浏览器可能根本没有实现 mediaDevices，所以我们可以先设置一个空的对象
+        if (navigator.mediaDevices === undefined) {
+            navigator.mediaDevices = {};
+        }
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function (constraints) {
+                // 首先，如果有getUserMedia的话，就获得它
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                // 一些浏览器根本没实现它 - 那么就返回一个error到promise的reject来保持一个统一的接口
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // 否则，为老的navigator.getUserMedia方法包裹一个Promise
+                return new Promise(function (resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+        const constraints = {
+            video: true,  //打开摄像头
+            audio: false  //打开录音
+        };
+        let promise = navigator.mediaDevices.getUserMedia(constraints);
+        promise.then(stream => {
+            let v = document.getElementById('v');
+        // 旧的浏览器可能没有srcObject
+        if ("srcObject" in v) {
+            v.srcObject = stream;
+        } else {
+            // 防止再新的浏览器里使用它，应为它已经不再支持了
+            v.src = window.URL.createObjectURL(stream);
+        }
+        v.onloadedmetadata = function (e) {
+            v.play();
+        };
+    }).catch(err => {
+            console.error(err.name + ": " + err.message);
+    })
+
+        can = document.getElementById("canvas")
+        ctx = can.getContext('2d');
+
+    })();
+    function getPhoto() {  //截图
+        ctx.drawImage(v, 0, 0, 610, 410);
+    }
+</script>
+</body>
+
+</html>

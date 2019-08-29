@@ -1,0 +1,18 @@
+
+keytool -genkey -alias ssl -keypass 123456 -keyalg RSA -keysize 1024 -validity 365 -keystore D:/ssl.keystore -storepass 123456
+
+使用keytool命令生成证书：
+  keytool
+    -genkey
+    -alias tomcat(别名)
+    -keypass 123456(别名密码)
+    -keyalg RSA(算法)
+    -keysize 1024(密钥长度)
+    -validity 365(有效期，天单位)
+    -keystore D:/keys/tomcat.keystore(指定生成证书的位置和证书名称)
+    -storepass 123456(获取keystore信息的密码)
+
+# 生成
+keytool -genkey -alias ssl -keypass 123456 -keyalg RSA -keystore D:/ssl.keystore
+# 删除
+keytool -delete -alias ssl -keystore D:/ssl.keystore -storepass 123456

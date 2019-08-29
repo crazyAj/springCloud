@@ -1,0 +1,2 @@
+# 初始时加载自定义类
+# org.springframework.context.ApplicationContextInitializer=com.example.thread.Application
