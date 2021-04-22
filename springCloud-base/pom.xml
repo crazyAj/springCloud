@@ -6,7 +6,6 @@
         <groupId>com.example</groupId>
         <artifactId>springCloud</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +14,6 @@
     <modules>
         <module>springCloud-base-client</module>
         <module>springCloud-base-client2</module>
-        <module>springCloud-base-zero</module>
     </modules>
 
     <dependencies>
